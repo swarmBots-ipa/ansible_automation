@@ -1,0 +1,62 @@
+---
+# Set environment variable for each machine seperatley and launch ROS nodes
+- hosts: barista_0
+  become: true
+  vars: 
+    env_vars:
+      - { name: "ROBOT_NAMESPACE", value: "barista_0" }
+  tasks:
+  - name: Create environment variable file
+    lineinfile:
+      dest: /etc/environment
+      line: "{{ item.name }}={{ item.value }}"
+      state: present
+    with_items: "{{ env_vars }}"
+  - name: Reload shell for environment variables to take effect
+    shell: . /etc/environment
+
+- hosts: barista_1
+  become: true
+  vars: 
+    env_vars:
+      - { name: "ROBOT_NAMESPACE", value: "barista_1" }
+  tasks:
+  - name: Create environment variable file
+    lineinfile:
+      dest: /etc/environment
+      line: "{{ item.name }}={{ item.value }}"
+      state: present
+    with_items: "{{ env_vars }}"
+  - name: Reload shell for environment variables to take effect
+    shell: . /etc/environment
+ 
+- hosts: barista_2
+  become: true
+  vars: 
+    env_vars:
+      - { name: "ROBOT_NAMESPACE", value: "barista_2" }
+  tasks:
+  - name: Create environment variable file
+    lineinfile:
+      dest: /etc/environment
+      line: "{{ item.name }}={{ item.value }}"
+      state: present
+    with_items: "{{ env_vars }}"
+  - name: Reload shell for environment variables to take effect
+    shell: . /etc/environment
+ 
+- hosts: barista_3
+  become: true
+  vars: 
+    env_vars:
+      - { name: "ROBOT_NAMESPACE", value: "barista_3" }
+  tasks:
+  - name: Create environment variable file
+    lineinfile:
+      dest: /etc/environment
+      line: "{{ item.name }}={{ item.value }}"
+      state: present
+    with_items: "{{ env_vars }}"
+  - name: Reload shell for environment variables to take effect
+    shell: . /etc/environment
+ 

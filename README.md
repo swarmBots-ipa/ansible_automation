@@ -24,15 +24,21 @@ You will no longer require a password to access these remote machines.
 
 Update all the devices in the inventory list
 ```
-ansible-playbook update.yml -i ~/ansible_automation/production/hosts -K
+ansible-playbook update.yaml -i ~/ansible_automation/production/hosts -K
 ```
-- K will ask for the user password to continue as sudo 
+**- K will prompt for the user password to continue** 
+
+To setup the environment variables for each robot robots
+```
+ansible-playbook set_env_variables.yaml -i ~/ansible_automation/production/hosts -K
+```
+
+To setup the bringup launch files in all robots
+```
+ansible-playbook bringup_robots.yaml -i ~/ansible_automation/production/hosts -K
+```
 
 To reboot all the devices in the inventory list
 ```
-ansible-playbook reboot.yml -i ~/ansible_automation/production/hosts -K
-```
-To setup the brinup launch files in all robots
-```
-ansible-playbook reboot.yml -i ~/ansible_automation/production/hosts -K
+ansible-playbook reboot.yaml -i ~/ansible_automation/production/hosts -K
 ```
