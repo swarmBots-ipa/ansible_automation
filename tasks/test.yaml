@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    env_vars:
+      - { name: "ROBOT_NAMESPACE", value: "barista_0" }
+  tasks:
+  - name: Create environment variable file
+    lineinfile:
+      dest: /etc/environment
+      line: "{{ item.name }}={{ item.value }}"
+      state: present
+    with_items: "{{ env_vars }}"
+  - name: Reload shell for environment variables to take effect
+    shell: . /etc/environment
+  - name: echo 
+    shell: echo $ROBOT_NAMESPACE 

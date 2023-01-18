@@ -22,13 +22,3 @@
       command: colcon build --symlink-install
       args:
         chdir: ~/turtlebot4_bringup
-
-    - name: source the ROS workspace 
-      shell: source /opt/ros/glactic/setup.basg && source install/setup.bash
-      args:
-        chdir: ~/turtlebot4_bringup
-
-    - name: Launch the ROS nodes
-      command: ros2 launch turtlebot4_bringup robot.launch.py
-      args:
-        chdir: ~/turtlebot4_bringup

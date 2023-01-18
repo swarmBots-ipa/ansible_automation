@@ -1,0 +1,61 @@
+---
+# Set environment variable for each machine seperatley and launch ROS nodes
+- hosts: barista_0
+  become: no
+  tasks:
+    - name: source the ROS workspace 
+      shell: source /opt/ros/glactic/setup.basg && source install/setup.bash
+      args:
+        chdir: ~/turtlebot4_bringup
+
+    - name: Launch the ROS nodes
+      command: ros2 launch turtlebot4_bringup robot.launch.py
+      environment: 
+        ROBOT_NAMESPACE: barista_0
+      args:
+        chdir: ~/turtlebot4_bringup
+
+- hosts: barista_1
+  become: no
+  tasks:
+    - name: source the ROS workspace 
+      shell: source /opt/ros/glactic/setup.basg && source install/setup.bash
+      args:
+        chdir: ~/turtlebot4_bringup
+
+    - name: Launch the ROS nodes
+      command: ros2 launch turtlebot4_bringup robot.launch.py
+      environment: 
+        ROBOT_NAMESPACE: barista_1
+      args:
+        chdir: ~/turtlebot4_bringup
+
+- hosts: barista_2
+  become: no
+  tasks:
+    - name: source the ROS workspace 
+      shell: source /opt/ros/glactic/setup.basg && source install/setup.bash
+      args:
+        chdir: ~/turtlebot4_bringup
+
+    - name: Launch the ROS nodes
+      command: ros2 launch turtlebot4_bringup robot.launch.py
+      environment: 
+        ROBOT_NAMESPACE: barista_2
+      args:
+        chdir: ~/turtlebot4_bringup
+
+- hosts: barista_3
+  become: no
+  tasks:
+    - name: source the ROS workspace 
+      shell: source /opt/ros/glactic/setup.basg && source install/setup.bash
+      args:
+        chdir: ~/turtlebot4_bringup
+
+    - name: Launch the ROS nodes
+      command: ros2 launch turtlebot4_bringup robot.launch.py
+      environment: 
+        ROBOT_NAMESPACE: barista_3
+      args:
+        chdir: ~/turtlebot4_bringup
