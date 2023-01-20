@@ -1,13 +1,11 @@
-localhost ansible_connection=local
-
 [barista_0]
-ubuntu@19.168.50.80
+ubuntu@192.168.50.80
 
-[barista_0]
-ubuntu@19.168.50.81
+[barista_1]
+ubuntu@192.168.50.81
 
-[barista_0]
-ubuntu@19.168.50.82
+[barista_2]
+ubuntu@192.168.50.82
 
-[barista_0]
-ubuntu@19.168.50.83
+[barista_3]
+ubuntu@192.168.50.83
