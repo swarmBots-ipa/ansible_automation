@@ -3,6 +3,9 @@
   hosts: all
   become: no
   tasks:
+    - name: remove the deb package from the system
+      shell: source /opt/ros/glactic/setup.basg && apt update && apt remove ros-galactic-turtlebot4-bringup 
+
     - name: Remove the directory if it exists and then rewrite on it
       file:
         path: ~/turtlebot4_bringup/src
