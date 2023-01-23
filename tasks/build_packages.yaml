@@ -1,0 +1,73 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  # Workspace setup
+  - name: Install vcstool
+    apt:
+      pkg: python3-vcstool
+    become: yes
+
+  - name: Install rosdep
+    apt:
+      pkg: python3-rosdep
+    become: yes
+
+  - name: Install colcon
+    apt:
+      pkg: python3-colcon-common-extensions
+    become: yes
+
+  - name: Create workspace
+    file:
+      path: "{{ workspace_root }}/src"
+      state: directory
+      mode: '2775'
+
+  - name: Copy the package repo file to the remote machines
+    ansible.builtin.copy:
+      src: repos/turtlebot4.repos
+      dest: "{{ workspace_root }}/src"
+      mode: 0755
+
+  - name: Setup workspace with vcstool
+    ansible.builtin.shell: vcs import < turtlebot4.repos
+    args:
+      chdir: "{{ workspace_root }}/src"
+
+
+  - name: Install dependencies
+    ansible.builtin.shell: rosdep update && rosdep install --from-paths src --ignore-src --rosdistro={{ rosdistro }} -y -r
+    args:
+      chdir: "{{ workspace_root }}"
+
+  - name: Build workspace
+    ansible.builtin.shell: 
+      cmd: source /opt/ros/{{ rosdistro }}/setup.bash && colcon build
+    args:
+      executable: /bin/bash
+      chdir: "{{ workspace_root }}"
+
+  # Launch setup
+  - name: Copy launch file to /etc/ros
+    fetch:
+      src: "{{ workspace_root }}/src/turtlebot4_robot/turtlebot4_bringup/launch/robot.launch.py"
+      dest: /etc/ros/{{ rosdistro }}/robot.launch.py
+      flat: yes
+    become: yes
+
+  - name: Create a systemd service for robot drivers
+    ansible.builtin.template:
+      src: /templates/robot.j2
+      dest: /etc/systemd/system/robot.service
+    become: yes
+
+  - name: Start the robot service
+    systemd:
+      name: robot
+      enabled: yes
+      state: started
+      daemon_reload: yes
+    become: yes
+
+

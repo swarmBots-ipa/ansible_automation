@@ -3,9 +3,11 @@
   hosts: all
   become: no
   tasks:
-    - name: remove the deb package from the system
-      shell: source /opt/ros/glactic/setup.basg && apt update && apt remove ros-galactic-turtlebot4-bringup 
-
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: ~/ansible_automation/production/run.sh
+        dest: ~/run.sh
+        mode: 0755
     - name: Remove the directory if it exists and then rewrite on it
       file:
         path: ~/turtlebot4_bringup/src
@@ -22,6 +24,6 @@
         dest: ~/turtlebot4_bringup/src
 
     - name: Build the repository using colcon
-      command: colcon build --symlink-install
+      command: colcon build
       args:
         chdir: ~/turtlebot4_bringup
