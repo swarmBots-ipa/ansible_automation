@@ -9,3 +9,6 @@
   args:
     executable: /bin/bash
     chdir: '{{ ros2_workspace }}' 
+  # async: 3600
+  # poll: 0
+  # uncomment this to run forever

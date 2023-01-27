@@ -11,7 +11,7 @@
 
     - name: Load required variables from config files
       ansible.builtin.include_vars:
-        file: vars/main.yaml
+        file: vars/ros-config.yaml
 
     - name: set some colcon default flags
       ansible.builtin.include_tasks:
