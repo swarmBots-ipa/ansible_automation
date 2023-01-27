@@ -33,9 +33,16 @@ To setup the environment variables for each robot robots
 ansible-playbook set_env_variables.yaml -i ~/ansible_automation/production/hosts -K
 ```
 
-To setup the bringup launch files in all robots
+Startup launch files in all robots as systemd service
 ```
-ansible-playbook bringup_robots.yaml -i ~/ansible_automation/production/hosts -K
+ansible-playbook ros2-deploy.yaml  -e "ansible_user=ipa remove=true" -i production/hosts.yaml -K -v
+```
+- remove=true for removing the systemd service
+- remove=false for starting up systemd service
+
+Startup launch files in all robots
+```
+ansible-playbook ros2-build-launch.yaml  -e "ansible_user=ipa remove=true" -i production/hosts.yaml -K -v
 ```
 
 To reboot all the devices in the inventory list

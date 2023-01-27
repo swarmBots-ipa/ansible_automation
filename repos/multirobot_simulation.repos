@@ -1,0 +1,5 @@
+repositories:
+  multirobot_simulation:
+    type: git
+    url: https://github.com/swarmBots-ipa/multirobot_simulation.git
+    version: main

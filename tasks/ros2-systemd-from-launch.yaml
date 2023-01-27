@@ -1,0 +1,53 @@
+---
+
+- name: ROS2 systemd service from launch | Create Unit file
+  copy:
+    dest: /usr/lib/systemd/system/ros2_{{ launch_service_name }}.service
+    content: |
+      # Created by ansible ros2-systemd-from-launch
+      # ROS2 launch service {{ launch_service_name }}
+      # ros2 workspace: {{ ros2_workspace }}
+      # package containing launch file: {{ launchpackage }}
+      # launchfile name: {{ launchfile }}
+      # network.target
+      [Unit]
+      Description=ROS2 launch {{ launchpackage }} {{ launchfile }}
+      After=multi-user.target    
+      [Service]
+      Environment="HOME=root"
+      ExecStart=/bin/bash -c "source install/setup.bash && ros2 launch {{ launchpackage }} {{ launchfile }}"
+      WorkingDirectory={{ ros2_workspace }}
+      User={{ ros2_user.name }}
+      Restart=yes
+      [Install]
+      WantedBy=multi-user.target
+  become: yes
+  when: launch_service_name is defined and launchpackage is defined and launchfile is defined
+
+# load the new systemd service, start it, and set it to start at boot
+- name: ROS2 systemd service from launch | Insert Unit file
+  ansible.builtin.systemd:
+    name: ros2_{{ launch_service_name }}.service
+    state: started
+    enabled: true
+    daemon_reload: true
+  become: yes
+  when: remove == "false"
+
+# load the new systemd service, but don't start it
+- name: ROS2 systemd service from launch | Disable Unit file
+  ansible.builtin.systemd:
+    name: ros2_{{ launch_service_name }}.service
+    state: stopped
+    enabled: no
+    daemon_reload: yes
+  become: yes
+  when: remove == "true"
+
+# remove the service file
+- name: ROS2 systemd service from launch | Remove launch service
+  ansible.builtin.file:
+    dest: /usr/lib/systemd/system/ros2_{{ launch_service_name }}.service
+    state: absent
+  become: yes
+  when: remove == "true"

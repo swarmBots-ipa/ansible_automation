@@ -1,0 +1,30 @@
+---
+# playbook to combine all other roles necessary to build ROs packages and deploy on target
+- name: Build ROS2 pkgs from source and launch them
+  vars: 
+    ros2_user:
+      name: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+    ros2_workspace: '/home/{{ ros2_user.name }}/{{ rosdistro }}_ws'
+  hosts: all
+  tasks:
+
+    - name: Load required variables from config files
+      ansible.builtin.include_vars:
+        file: vars/ros-config.yaml
+
+    - name: set some colcon default flags
+      ansible.builtin.include_tasks:
+        file: tasks/ros2-colcon-set-defaults.yaml
+      vars:
+        ros2_colcon_symlink: true
+        ros2_colcon_needs_latomic: false
+
+    - name: ROS2 colcon | build the workspace
+      ansible.builtin.include_tasks:
+        file: tasks/ros2-build-pkgs.yaml
+
+    - name: Run ros2 launch files 
+      ansible.builtin.include_tasks:
+        file: tasks/ros2-launch.yaml
+
