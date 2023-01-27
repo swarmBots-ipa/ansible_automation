@@ -1,0 +1,4 @@
+  turtlebot4_robot:
+    type: git
+    url: https://github.com/swarmBots-ipa/turtlebot4_robot.git
+    version: galactic

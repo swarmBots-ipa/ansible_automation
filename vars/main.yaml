@@ -1,0 +1,13 @@
+---
+rosdistro: galactic
+repo: multirobot_simulation.repos
+launchpackage: multirobot_bringup
+launchfile: multirobot_bringup.launch.xml
+launch_service_name: multirobot_bringup
+
+
+# rosdistro: galactic
+# repo: turtlebot4.repos
+# launchpackage: turtlebot4_bringup
+# launchfile: robot.launch.py
+# launch_service_name: turtlebot4_bringup

@@ -1,0 +1,46 @@
+---
+- name: Install vcstool
+  ansible.builtin.apt:
+    pkg: python3-vcstool
+  become: yes
+
+- name: Install rosdep
+  ansible.builtin.apt:
+    pkg: python3-rosdep
+  become: yes
+
+- name: Install colcon
+  ansible.builtin.apt:
+    pkg: python3-colcon-common-extensions
+  become: yes
+
+- name: Create workspace 
+  ansible.builtin.file:
+    path: "{{ ros2_workspace }}/src"
+    state: directory
+    mode: '2775'
+
+- name: Copy the package repo file to the remote machines
+  ansible.builtin.copy:
+    src: "repos/{{ repo }}"
+    dest: "{{ ros2_workspace }}/src"
+
+- name: ROS2 download sources with vcs_tool
+  ansible.builtin.shell: 
+    cmd: 'vcs import < {{ repo }}' 
+    executable: /bin/bash
+    chdir: '{{ ros2_workspace }}/src'
+
+- name: Install dependencies
+  ansible.builtin.shell: 
+    cmd: rosdep update && rosdep install --from-paths src --ignore-src --rosdistro={{ rosdistro }} -y -r
+    chdir: "{{ ros2_workspace }}"
+
+- name: Build ROS2 packages from source
+  ansible.builtin.shell: 
+    cmd: "source /opt/ros/{{ rosdistro }}/setup.bash && colcon build"
+    executable: /bin/bash
+    chdir: "{{ ros2_workspace }}"
+
+
+
